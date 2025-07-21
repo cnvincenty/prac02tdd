@@ -71,6 +71,7 @@ public class ClienteServicioImplementacion implements ClienteServicio{
         salida.setId(entrada.getId());
         salida.setNombre(entrada.getNombre());
         salida.setDip(entrada.getDip());
+        salida.setGrupoclienteId(entrada.getGrupocliente() != null ? entrada.getGrupocliente().getId() : null);
         return salida;
     }
 

@@ -101,7 +101,7 @@ public class FacturaVentaServicioTest {
         assertEquals("Almacén Central", resultado.getAlmacen());
         assertEquals("Contado", resultado.getCondicionPago());
         assertEquals(1, resultado.getItems().size());
-        
+
         FacturaVentaItemOTD itemResultado = resultado.getItems().get(0);
         assertEquals("Taladro BOSCH", itemResultado.getProductoNombre());
         assertEquals("Herramientas", itemResultado.getProductoGrupo());

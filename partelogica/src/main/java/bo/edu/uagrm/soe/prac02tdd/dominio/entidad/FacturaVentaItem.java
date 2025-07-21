@@ -58,8 +58,8 @@ public class FacturaVentaItem {
     @Transient
     public void calcularDescuento(BigDecimal descuentoCliente) {
         BigDecimal descuentoProducto = BigDecimal.ZERO;
-        if (producto != null && producto.getGrupoproducto() != null && 
-            producto.getGrupoproducto().getDescuento() != null) {
+        if (producto != null && producto.getGrupoproducto() != null &&
+                producto.getGrupoproducto().getDescuento() != null) {
             descuentoProducto = producto.getGrupoproducto().getDescuento();
         }
 
@@ -68,10 +68,10 @@ public class FacturaVentaItem {
         }
 
         porcentajeDescuento = descuentoCliente.add(descuentoProducto);
-        
+
         BigDecimal importeTotal = calcularImporteTotal();
         montoDescuento = importeTotal.multiply(porcentajeDescuento)
-                                    .divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
+                .divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
         subtotal = importeTotal.subtract(montoDescuento);
     }
 }

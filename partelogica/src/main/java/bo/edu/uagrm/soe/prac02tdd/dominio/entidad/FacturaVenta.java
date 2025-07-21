@@ -56,7 +56,7 @@ public class FacturaVenta {
 
     public void calcularTotales() {
         BigDecimal descuentoCliente = BigDecimal.ZERO;
-        if (cliente != null && cliente.getGrupocliente() != null && 
+        if (cliente != null && cliente.getGrupocliente() != null &&
             cliente.getGrupocliente().getDescuento() != null) {
             descuentoCliente = cliente.getGrupocliente().getDescuento();
         }

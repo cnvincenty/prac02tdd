@@ -73,6 +73,7 @@ public class ProductoServicioImplementacion implements ProductoServicio{
         salida.setNombre(entrada.getNombre());
         salida.setPreciounitario(entrada.getPreciounitario());
         salida.setUnidadMedida(entrada.getUnidadMedida());
+        salida.setGrupoproductoId(entrada.getGrupoproducto() != null ? entrada.getGrupoproducto().getId() : null);
         return salida;
     }
 

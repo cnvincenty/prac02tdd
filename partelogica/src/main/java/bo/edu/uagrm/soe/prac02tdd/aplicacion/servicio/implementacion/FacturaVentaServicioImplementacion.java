@@ -87,7 +87,7 @@ public class FacturaVentaServicioImplementacion implements FacturaVentaServicio 
         dto.setFecha(facturaVenta.getFecha());
         dto.setClienteId(facturaVenta.getCliente().getId());
         dto.setClienteNombre(facturaVenta.getCliente().getNombre());
-        dto.setClienteGrupo(facturaVenta.getCliente().getGrupocliente() != null ? 
+        dto.setClienteGrupo(facturaVenta.getCliente().getGrupocliente() != null ?
                 facturaVenta.getCliente().getGrupocliente().getNombre() : null);
         dto.setAlmacen(facturaVenta.getAlmacen());
         dto.setCondicionPago(facturaVenta.getCondicionPago());
@@ -97,14 +97,14 @@ public class FacturaVentaServicioImplementacion implements FacturaVentaServicio 
             FacturaVentaItemOTD itemDTO = new FacturaVentaItemOTD();
             itemDTO.setProductoId(item.getProducto().getId());
             itemDTO.setProductoNombre(item.getProducto().getNombre());
-            itemDTO.setProductoGrupo(item.getProducto().getGrupoproducto() != null ? 
+            itemDTO.setProductoGrupo(item.getProducto().getGrupoproducto() != null ?
                     item.getProducto().getGrupoproducto().getNombre() : null);
             itemDTO.setCantidad(item.getCantidad());
             itemDTO.setPrecioUnitario(item.getPrecioUnitario());
             itemDTO.setPorcentajeDescuento(item.getPorcentajeDescuento());
             itemDTO.setMontoDescuento(item.getMontoDescuento());
             itemDTO.setSubtotal(item.getSubtotal());
-            
+
             dto.getItems().add(itemDTO);
         }
 

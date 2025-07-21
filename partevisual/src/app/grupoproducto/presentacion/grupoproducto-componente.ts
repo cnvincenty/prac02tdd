@@ -17,7 +17,7 @@ export class GrupoproductoComponente implements OnInit{
   @ViewChild('ventanaModal') ventanaModalRef!: ElementRef; modal?: Modal;
 
   datos: Grupoproducto[] = [];
-  dato: Grupoproducto = { nombre: '' };
+  dato: Grupoproducto = { nombre: '', descuento: 0 };
   editando: boolean = false;
 
   constructor(private servicio: GrupoproductoServicio) { }
@@ -27,7 +27,7 @@ export class GrupoproductoComponente implements OnInit{
   }
 
   abrirNuevo(): void {
-    this.dato = { nombre: '' };
+    this.dato = { nombre: '', descuento: 0 };
     this.editando = false;
 
     if (!this.modal) {
@@ -77,7 +77,7 @@ export class GrupoproductoComponente implements OnInit{
   }
 
   reset(): void {
-    this.dato = { nombre: '' };
+    this.dato = { nombre: '', descuento: 0 };
     this.editando = false;
   }
 
