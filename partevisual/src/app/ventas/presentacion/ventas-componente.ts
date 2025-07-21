@@ -10,6 +10,9 @@ import { Cliente } from '../../cliente/dominio/cliente';
 import { FacturaventaServicio } from '../servicio/facturaventa-servicio';
 import { Facturaventa } from '../dominio/facturaventa';
 import { Facturaventaitem } from '../dominio/facturaventaitem';
+import { Grupoproducto } from '../../grupoproducto/dominio/grupoproducto';
+import { Grupocliente } from '../../grupocliente/dominio/grupocliente';
+import { GrupoclienteServicio } from '../../grupocliente/servicio/grupocliente-servicio';
 
 @Component({
   selector: 'app-ventas-componente',
@@ -36,8 +39,12 @@ export class VentasComponente implements OnInit{
 
   clienteEncontrado: any = null;
 
+  gruposClientes: Grupocliente[] = [];
+  gruposProductos: Grupoproducto[] = [];
+
   constructor(
     private grupoproductoServicio: GrupoproductoServicio,
+    private grupoclienteServicio: GrupoclienteServicio,
     private productoServicio: ProductoServicio,
     private clienteServicio: ClienteServicio,
     private facturaventaServicio: FacturaventaServicio
@@ -45,6 +52,17 @@ export class VentasComponente implements OnInit{
 
   ngOnInit(): void {
     this.cargarGrupos();
+    this.cargarGruposClientes();
+  }
+
+  cargarGruposClientes(): void {
+    this.grupoclienteServicio.obtenerTodos().subscribe((res) => {
+      this.gruposClientes = res;
+    });
+
+    this.grupoproductoServicio.obtenerTodos().subscribe((res) => {
+      this.gruposProductos = res;
+    });
   }
 
   cargarGrupos(): void {
@@ -135,6 +153,31 @@ export class VentasComponente implements OnInit{
         alert('Ocurrió un error al registrar la factura');
       }
     });
+  }
+
+  get total(): number {
+    return this.productosSeleccionados.reduce((sum, item) => {
+      return sum + (item.producto.preciounitario * item.cantidad);
+    }, 0);
+  }
+
+  get descuentoTotal(): number {
+    return this.productosSeleccionados.reduce((sum, item) => {
+      const grupoProducto = this.gruposProductos.find(g => g.id === item.producto.grupoproductoId);
+      const descuentoProducto = grupoProducto?.descuento || 0;
+
+      const grupoCliente = this.gruposClientes.find(g => g.id === this.clienteEncontrado?.grupoclienteId);
+      const descuentoCliente = grupoCliente?.descuento || 0;
+
+      const descuentoTotal = descuentoProducto + descuentoCliente;
+      const descuentoMonto = (item.producto.preciounitario * item.cantidad) * (descuentoTotal / 100);
+
+      return sum + descuentoMonto;
+    }, 0);
+  }
+
+  get totalAPagar(): number {
+    return this.total - this.descuentoTotal;
   }
 
 }

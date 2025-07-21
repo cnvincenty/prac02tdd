@@ -92,17 +92,17 @@
         <tfoot *ngIf="productosSeleccionados.length > 0">
           <tr>
             <th colspan="3" class="text-end">Total:</th>
-            <th class="text-end"></th>
+            <th class="text-end">{{ total | number:'1.2-2' }}</th>
             <th></th>
           </tr>
           <tr>
             <th colspan="3" class="text-end">Descuento:</th>
-            <th class="text-end"></th>
+            <th class="text-end text-danger">- {{ descuentoTotal | number:'1.2-2' }}</th>
             <th></th>
           </tr>
           <tr>
             <th colspan="3" class="text-end">Total a pagar:</th>
-            <th class="text-end"></th>
+            <th class="text-end text-success">{{ totalAPagar | number:'1.2-2' }}</th>
             <th></th>
           </tr>
         </tfoot>
