@@ -39,6 +39,4 @@ public class Producto {
     @Column(name = "preciounitario", precision = 10, scale = 2)
     private BigDecimal preciounitario;
 
-    @Column(name = "descuento", precision = 10, scale = 2)
-    private BigDecimal descuento;
 }

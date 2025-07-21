@@ -44,6 +44,7 @@ public class GrupoproductoServicioImplementacion implements GrupoproductoServici
         Grupoproducto salida = repositorio.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException("Grupoproducto no encontrado"));
         salida.setNombre(otd.getNombre());
+        salida.setDescuento(otd.getDescuento());
         return aOTD(repositorio.save(salida));
     }
 
@@ -56,6 +57,7 @@ public class GrupoproductoServicioImplementacion implements GrupoproductoServici
         GrupoproductoOTD salida = new GrupoproductoOTD();
         salida.setId(entrada.getId());
         salida.setNombre(entrada.getNombre());
+        salida.setDescuento(entrada.getDescuento());
         return salida;
     }
 
@@ -63,6 +65,7 @@ public class GrupoproductoServicioImplementacion implements GrupoproductoServici
         Grupoproducto salida = new Grupoproducto();
         salida.setId(entrada.getId());
         salida.setNombre(entrada.getNombre());
+        salida.setDescuento(entrada.getDescuento());
         return salida;
     }
 

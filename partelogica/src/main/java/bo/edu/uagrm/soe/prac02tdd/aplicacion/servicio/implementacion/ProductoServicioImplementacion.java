@@ -51,7 +51,6 @@ public class ProductoServicioImplementacion implements ProductoServicio{
                 .orElseThrow(() -> new RecursoNoEncontradoException("Producto no encontrado"));
         salida.setNombre(otd.getNombre());
         salida.setPreciounitario(otd.getPreciounitario());
-        salida.setDescuento(otd.getDescuento());
         salida.setUnidadMedida(otd.getUnidadMedida());
 
         if (otd.getGrupoproductoId() != null) {
@@ -73,7 +72,6 @@ public class ProductoServicioImplementacion implements ProductoServicio{
         salida.setId(entrada.getId());
         salida.setNombre(entrada.getNombre());
         salida.setPreciounitario(entrada.getPreciounitario());
-        salida.setDescuento(entrada.getDescuento());
         salida.setUnidadMedida(entrada.getUnidadMedida());
         return salida;
     }
@@ -83,7 +81,6 @@ public class ProductoServicioImplementacion implements ProductoServicio{
         salida.setId(entrada.getId());
         salida.setNombre(entrada.getNombre());
         salida.setPreciounitario(entrada.getPreciounitario());
-        salida.setDescuento(entrada.getDescuento());
         salida.setUnidadMedida(entrada.getUnidadMedida());
         if (entrada.getGrupoproductoId() != null) {
             Grupoproducto grupoproducto = grupoproductoRepositorio.findById(entrada.getGrupoproductoId())

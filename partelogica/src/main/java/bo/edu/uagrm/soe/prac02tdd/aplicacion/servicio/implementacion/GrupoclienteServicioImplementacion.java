@@ -44,6 +44,7 @@ public class GrupoclienteServicioImplementacion implements GrupoclienteServicio{
         Grupocliente salida = repositorio.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException("Grupocliente no encontrado"));
         salida.setNombre(otd.getNombre());
+        salida.setDescuento(otd.getDescuento());
         return aOTD(repositorio.save(salida));
     }
 
