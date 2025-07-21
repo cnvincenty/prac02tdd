@@ -22,4 +22,6 @@ public interface ProductoServicio {
     void cargarImagen(Long id, MultipartFile archivo);
 
     Resource descargarImagen(String nombreArchivo);
+
+    List<ProductoOTD> obtenerPorIdGrupoproducto(Long idgrupoproducto);
 }

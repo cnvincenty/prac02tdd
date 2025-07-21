@@ -1,0 +1,10 @@
+export interface Facturaventaitem {
+    productoId: number;
+    productoNombre: string;
+    productoGrupo: string;
+    cantidad: number;
+    precioUnitario: number;
+    porcentajeDescuento: number;
+    montoDescuento: number;
+    subtotal: number;
+}

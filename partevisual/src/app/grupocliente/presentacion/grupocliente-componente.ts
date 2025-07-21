@@ -42,6 +42,8 @@ export class GrupoclienteComponente implements OnInit{
   }
 
   guardar(): void {
+    this.dato.nombre = this.dato.nombre.toUpperCase();
+
     if (this.editando && this.dato.id) {
       this.servicio.actualizar(this.dato).subscribe(() => {
         this.reset();

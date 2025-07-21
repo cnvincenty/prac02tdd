@@ -19,15 +19,24 @@
         <th class="text-center">Nombre</th>
         <th class="text-center">Unidad de Medida</th>
         <th class="text-center">Precio Unitario</th>
+        <th class="text-center">Imagen referencial</th>
         <th class="text-center">Acciones</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let g of datos">
-        <td class="text-center">{{ g.id }}</td>
-        <td class="text-left">{{ g.nombre }}</td>
-        <td class="text-left">{{ g.unidadMedida }}</td>
-        <td class="text-left">{{ g.preciounitario }}</td>
+        <td class="align-middle text-center">{{ g.id }}</td>
+        <td class="align-middle text-left">{{ g.nombre }}</td>
+        <td class="align-middle text-left">{{ g.unidadMedida }}</td>
+        <td class="align-middle text-end"><h2>{{ g.preciounitario | number:'1.2-2'}}</h2></td>
+        <td class="align-middle text-center">
+          <img
+              [src]="rutaImagen+g.ruta"
+              class="img-thumbnail"
+              width="150px"
+              height="150px"
+          />
+        </td>
         <td class="text-center">
           <button class="btn btn-sm btn-warning me-2" (click)="editar(g)">
             <i class="bi bi-pencil-square"></i> Editar
@@ -74,6 +83,19 @@
                 <option [ngValue]="null">Seleccione...</option>
                 <option *ngFor="let gp of gruposproductos" [ngValue]="gp.id">{{ gp.nombre }}</option>
               </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Vista Previa</label>
+              <p class="text-center align-middle">
+                <img [src]="rutaImagen+dato.ruta" class="img-thumbnail" width="150px" height="150px"/>
+              </p>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Carga imagen</label>
+              <input type="file" class="form-control" (change)="fseleccionarArchivo($event)" />
+              <hr>
+              <img [src]="imagenSrc" *ngIf="imagenSrc" class="img-fluid mx-auto d-block" height="150px" width="150px" />
             </div>
 
           </div>

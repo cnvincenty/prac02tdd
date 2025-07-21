@@ -27,8 +27,8 @@
     <tbody>
       <tr *ngFor="let _i of datos">
         <td class="text-center">{{ _i.id }}</td>
-        <td class="text-left">{{ _i.nombre }}</td>
-        <td class="text-left">{{ _i.descuento }}</td>
+        <td class="text-start">{{ _i.nombre }}</td>
+        <td class="text-end">{{ _i.descuento | number:'1.2-2'}}</td>
         <td class="text-center">
           <button
             class="btn btn-sm btn-warning me-2"

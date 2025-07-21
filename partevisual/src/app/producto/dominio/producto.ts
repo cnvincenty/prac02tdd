@@ -4,4 +4,5 @@ export interface Producto {
   unidadMedida: string;
   preciounitario: number;
   grupoproductoId: number;
+  ruta: string;
 }

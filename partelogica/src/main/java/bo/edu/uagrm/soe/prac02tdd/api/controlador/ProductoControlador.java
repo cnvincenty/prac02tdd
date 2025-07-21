@@ -41,6 +41,12 @@ public class ProductoControlador {
         return ResponseEntity.ok(servicio.obtenerTodos());
     }
 
+    @GetMapping("/porGrupo/{id}")
+    @Operation(summary = "Obtener todos los Productos Por Grupo")
+    public ResponseEntity<List<ProductoOTD>> obtenerTodos(@PathVariable Long id) {
+        return ResponseEntity.ok(servicio.obtenerPorIdGrupoproducto(id));
+    }
+
     @GetMapping("/{id}")
     @Operation(summary = "Obtener Producto por ID")
     public ResponseEntity<ProductoOTD> obtenerPorId(@PathVariable Long id) {

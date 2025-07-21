@@ -16,7 +16,7 @@ import bo.edu.uagrm.soe.prac02tdd.aplicacion.otd.FacturaVentaOTD;
 import bo.edu.uagrm.soe.prac02tdd.aplicacion.servicio.FacturaVentaServicio;
 
 @RestController
-@RequestMapping("/api/facturas-venta")
+@RequestMapping("/api/v1/facturaventa")
 public class FacturaVentaControlador {
 
     @Autowired

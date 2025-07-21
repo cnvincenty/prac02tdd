@@ -17,6 +17,10 @@ export class ProductoServicio {
     return this.httpProducto.get<Producto[]>(this.url);
   }
 
+  obtenerPorIdGrupoproducto(id: number): Observable<Producto[]> {
+    return this.httpProducto.get<Producto[]>(`${this.url}/porGrupo/${id}`);
+  }
+
   obtenerPorId(id: number): Observable<Producto> {
     return this.httpProducto.get<Producto>(`${this.url}/${id}`);
   }
@@ -32,5 +36,21 @@ export class ProductoServicio {
   eliminarPorId(id: number): Observable<Producto> {
     return this.httpProducto.delete<Producto>(`${this.url}/${id}`);
   }
+
+  subirImagen(archivo: File, id: number): Observable<any>{
+    const formArchivo = new FormData();
+    formArchivo.append("archivo", archivo);
+    return this.httpProducto.post<void>(`${this.url}/subirImagen/${id}`, formArchivo, {
+      reportProgress: true,
+      responseType: 'json',
+    });
+  }
+
+  descargarImagen(nombreArchivo: string){
+    return this.httpProducto.get(`${this.url}/descargarImagen/${nombreArchivo}`, {
+      responseType: 'blob',
+    });
+  }
+
 
 }

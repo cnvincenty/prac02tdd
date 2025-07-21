@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Modal } from 'bootstrap';
 import { Producto } from '../dominio/producto';
@@ -16,6 +17,11 @@ import { CommonModule } from '@angular/common';
 })
 export class ProductoComponente implements OnInit{
 
+  private readonly apiURL = `${environment.apiUrl}/v1/producto`;
+
+  readonly rutaImagen = `${this.apiURL}/descargarImagen/`;
+
+
   @ViewChild('ventanaModal') ventanaModalRef!: ElementRef; modal?: Modal;
 
   datos: Producto[] = [];
@@ -23,6 +29,9 @@ export class ProductoComponente implements OnInit{
   editando = false;
 
   gruposproductos: Grupoproducto[] = [];
+
+  archivoSeleccionado!: File;
+  imagenSrc!: string;
 
   constructor(
     private servicio: ProductoServicio,
@@ -39,7 +48,8 @@ export class ProductoComponente implements OnInit{
       nombre: '',
       unidadMedida: '',
       preciounitario: 0,
-      grupoproductoId: 0
+      grupoproductoId: 0,
+      ruta: ''
     };
   }
 
@@ -57,13 +67,17 @@ export class ProductoComponente implements OnInit{
   }
 
   guardar(): void {
-    const obs = this.editando && this.dato.id
+    this.dato.nombre = this.dato.nombre.toUpperCase();
+    this.dato.unidadMedida = this.dato.unidadMedida.toUpperCase();
+
+    const obs = this.editando && this.dato.id !== undefined
       ? this.servicio.actualizar(this.dato)
       : this.servicio.crear(this.dato);
 
-    obs.subscribe(() => {
+    obs.subscribe((data) => {
       this.reset();
       this.cargarDatos();
+      this.fsubirArchivo(data.id!);
       this.cerrarModal();
     });
   }
@@ -96,4 +110,23 @@ export class ProductoComponente implements OnInit{
   cargarCombos(): void {
     this.grupoproductoService.obtenerTodos().subscribe(data => this.gruposproductos = data);
   }
+
+  fseleccionarArchivo(event: any){
+    const reader = new FileReader();
+    this.archivoSeleccionado = event.target.files[0];
+    if (event.target.files[0] && event.target.files.length) {
+      const file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.imagenSrc = reader.result as string;
+      };
+    }
+  }
+
+  fsubirArchivo(id: number) {
+    this.servicio.subirImagen(this.archivoSeleccionado, id).subscribe( data => {
+    })
+  }
+
+
 }
