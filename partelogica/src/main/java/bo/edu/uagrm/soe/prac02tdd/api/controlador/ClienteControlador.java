@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import bo.edu.uagrm.soe.prac02tdd.aplicacion.otd.ClienteOTD;
@@ -41,6 +42,12 @@ public class ClienteControlador {
     @Operation(summary = "Obtener Cliente por ID")
     public ResponseEntity<ClienteOTD> obtenerPorId(@PathVariable Long id) {
         return ResponseEntity.ok(servicio.obtenerPorId(id));
+    }
+
+    @GetMapping("/buscarPorDIP")
+    @Operation(summary = "buscar Cliente por DIP")
+    public ResponseEntity<ClienteOTD> buscarPorDip(@RequestParam String dip) {
+        return ResponseEntity.ok(servicio.buscarPorDip(dip));
     }
 
     @PostMapping

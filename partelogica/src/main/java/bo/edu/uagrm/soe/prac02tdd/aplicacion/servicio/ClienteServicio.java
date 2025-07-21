@@ -10,6 +10,8 @@ public interface ClienteServicio {
 
     ClienteOTD obtenerPorId(Long id);
 
+    ClienteOTD buscarPorDip(String dip);
+
     ClienteOTD crear(ClienteOTD otd);
 
     ClienteOTD actualizar(Long id, ClienteOTD otd);

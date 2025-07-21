@@ -34,4 +34,11 @@ export const routes: Routes = [
         (m) => m.ClienteComponente
       ),
   },
+  {
+    path: 'venta',
+    loadComponent: () =>
+      import('./ventas/presentacion/ventas-componente').then(
+        (m) => m.VentasComponente
+      ),
+  },
 ];

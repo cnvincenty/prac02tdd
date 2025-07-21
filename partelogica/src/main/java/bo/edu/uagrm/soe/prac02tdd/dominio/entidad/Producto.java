@@ -39,4 +39,6 @@ public class Producto {
     @Column(name = "preciounitario", precision = 10, scale = 2)
     private BigDecimal preciounitario;
 
+    @Column(name = "ruta", length = 200, nullable = false)
+    private String ruta;
 }

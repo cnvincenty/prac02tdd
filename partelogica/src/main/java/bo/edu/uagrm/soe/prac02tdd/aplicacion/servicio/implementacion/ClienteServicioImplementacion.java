@@ -40,6 +40,13 @@ public class ClienteServicioImplementacion implements ClienteServicio{
     }
 
     @Override
+    public ClienteOTD buscarPorDip(String dip) {
+        Cliente salida = repositorio.buscarPorDip(dip)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Cliente no encontrado"));
+        return aOTD(salida);
+    }
+
+    @Override
     public ClienteOTD crear(ClienteOTD otd) {
         Cliente salida = aENTIDAD(otd);
         return aOTD(repositorio.save(salida));

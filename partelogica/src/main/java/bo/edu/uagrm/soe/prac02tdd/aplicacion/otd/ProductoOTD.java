@@ -21,4 +21,6 @@ public class ProductoOTD {
 
     private BigDecimal descuento;
 
+    private String ruta;
+
 }
