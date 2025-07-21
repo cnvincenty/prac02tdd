@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { Index } from './principal/index';
-import { GrupoproductoComponente } from './grupoproducto/presentacion/grupoproducto-componente';
 
 export const routes: Routes = [
     {
@@ -10,5 +9,9 @@ export const routes: Routes = [
     {
         path: 'grupoproducto',
         loadComponent: () => import('./grupoproducto/presentacion/grupoproducto-componente').then(m => m.GrupoproductoComponente),
+    },
+    {
+        path: 'grupocliente',
+        loadComponent: () => import('./grupocliente/presentacion/grupocliente-componente').then(m => m.GrupoclienteComponente),
     },
 ];
