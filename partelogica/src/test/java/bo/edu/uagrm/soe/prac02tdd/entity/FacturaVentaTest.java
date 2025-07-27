@@ -18,7 +18,10 @@ public class FacturaVentaTest {
         Cliente cliente = new Cliente();
         cliente.setId(1L);
         cliente.setNombre("Juan Miranda");
-        cliente.setDip("12345678");
+        cliente.setCodigo("CL11101110");
+        cliente.setTipoDocumento(TipoDocumeto.CI);
+        cliente.setNumeroDocumento("11101110");
+        cliente.setEmail("jjsmm@gmail.com");
         cliente.setGrupocliente(grupoClienteAlMayor);
 
         Grupoproducto grupoHerramientas = new Grupoproducto();
@@ -65,7 +68,10 @@ public class FacturaVentaTest {
         Cliente cliente = new Cliente();
         cliente.setId(1L);
         cliente.setNombre("Juan Miranda");
-        cliente.setDip("12345678");
+        cliente.setCodigo("CL11101110");
+        cliente.setTipoDocumento(TipoDocumeto.CI);
+        cliente.setNumeroDocumento("11101110");
+        cliente.setEmail("jjsmm@gmail.com");
         cliente.setGrupocliente(grupoClienteAlMayor);
 
         Grupoproducto grupoHerramientas = new Grupoproducto();
@@ -102,7 +108,10 @@ public class FacturaVentaTest {
         Cliente cliente = new Cliente();
         cliente.setId(1L);
         cliente.setNombre("Juan Miranda");
-        cliente.setDip("12345678");
+        cliente.setCodigo("CL11101110");
+        cliente.setTipoDocumento(TipoDocumeto.CI);
+        cliente.setNumeroDocumento("11101110");
+        cliente.setEmail("jjsmm@gmail.com");
         cliente.setGrupocliente(grupoClienteNormal);
 
         Grupoproducto grupoHerramientas = new Grupoproducto();
@@ -140,7 +149,10 @@ public class FacturaVentaTest {
         Cliente cliente = new Cliente();
         cliente.setId(1L);
         cliente.setNombre("Juan Miranda");
-        cliente.setDip("12345678");
+        cliente.setCodigo("CL11101110");
+        cliente.setTipoDocumento(TipoDocumeto.CI);
+        cliente.setNumeroDocumento("11101110");
+        cliente.setEmail("jjsmm@gmail.com");
         cliente.setGrupocliente(grupoClienteAlMayor);
 
         Grupoproducto grupoHerramientas = new Grupoproducto();

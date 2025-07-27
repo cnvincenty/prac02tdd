@@ -1,9 +1,5 @@
 package bo.edu.uagrm.soe.prac02tdd.aplicacion.servicio.implementacion;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import bo.edu.uagrm.soe.prac02tdd.aplicacion.otd.ClienteOTD;
 import bo.edu.uagrm.soe.prac02tdd.aplicacion.servicio.ClienteServicio;
 import bo.edu.uagrm.soe.prac02tdd.dominio.entidad.Cliente;
@@ -11,88 +7,101 @@ import bo.edu.uagrm.soe.prac02tdd.dominio.entidad.Grupocliente;
 import bo.edu.uagrm.soe.prac02tdd.excepcion.RecursoNoEncontradoException;
 import bo.edu.uagrm.soe.prac02tdd.infraestructura.ClienteRepositorio;
 import bo.edu.uagrm.soe.prac02tdd.infraestructura.GrupoclienteRepositorio;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
-public class ClienteServicioImplementacion implements ClienteServicio{
+@RequiredArgsConstructor
+public class ClienteServicioImplementacion implements ClienteServicio {
 
-    private final ClienteRepositorio repositorio;
-
+    private final ClienteRepositorio clienteRepositorio;
     private final GrupoclienteRepositorio grupoclienteRepositorio;
-
-    public ClienteServicioImplementacion(ClienteRepositorio repositorio,
-            GrupoclienteRepositorio grupoclienteRepositorio) {
-        this.repositorio = repositorio;
-        this.grupoclienteRepositorio = grupoclienteRepositorio;
-    }
 
     @Override
     public List<ClienteOTD> obtenerTodos() {
-        return repositorio.findAll().stream()
-                .map(this::aOTD)
-                .toList();
+        return clienteRepositorio.findAll().stream()
+            .map(this::mapToOtd)
+            .toList();
     }
 
     @Override
     public ClienteOTD obtenerPorId(Long id) {
-        Cliente salida = repositorio.findById(id)
-                .orElseThrow(() -> new RecursoNoEncontradoException("Cliente no encontrado"));
-        return aOTD(salida);
+        Cliente cliente = obtenerClientePorId(id);
+        return mapToOtd(cliente);
     }
 
     @Override
-    public ClienteOTD buscarPorDip(String dip) {
-        Cliente salida = repositorio.buscarPorDip(dip)
-                .orElseThrow(() -> new RecursoNoEncontradoException("Cliente no encontrado"));
-        return aOTD(salida);
+    public ClienteOTD buscarPorCodigo(String codigo) {
+        Cliente cliente = clienteRepositorio.findByCodigo(codigo)
+            .orElseThrow(() -> new RecursoNoEncontradoException("Cliente con código '%s' no encontrado".formatted(codigo)));
+        return mapToOtd(cliente);
     }
 
     @Override
     public ClienteOTD crear(ClienteOTD otd) {
-        Cliente salida = aENTIDAD(otd);
-        return aOTD(repositorio.save(salida));
+        Cliente cliente = mapToEntidad(otd);
+        clienteRepositorio.save(cliente);
+        return mapToOtd(cliente);
     }
 
     @Override
     public ClienteOTD actualizar(Long id, ClienteOTD otd) {
-        Cliente salida = repositorio.findById(id)
-                .orElseThrow(() -> new RecursoNoEncontradoException("Cliente no encontrado"));
-        salida.setNombre(otd.getNombre());
-        salida.setDip(otd.getDip());
+        Cliente cliente = obtenerClientePorId(id);
+
+        BeanUtils.copyProperties(otd, cliente, "id", "grupocliente"); // no sobrescribir grupocliente directamente
 
         if (otd.getGrupoclienteId() != null) {
-            Grupocliente grupocliente = grupoclienteRepositorio.findById(otd.getGrupoclienteId())
-                .orElseThrow(() -> new RecursoNoEncontradoException("Grupocliente no encontrado"));
-            salida.setGrupocliente(grupocliente);
+            Grupocliente grupocliente = obtenerGrupoPorId(otd.getGrupoclienteId());
+            cliente.setGrupocliente(grupocliente);
         }
 
-        return aOTD(repositorio.save(salida));
+        clienteRepositorio.save(cliente);
+        return mapToOtd(cliente);
     }
 
     @Override
     public void eliminar(Long id) {
-        repositorio.deleteById(id);
-    }
-
-    private ClienteOTD aOTD(Cliente entrada) {
-        ClienteOTD salida = new ClienteOTD();
-        salida.setId(entrada.getId());
-        salida.setNombre(entrada.getNombre());
-        salida.setDip(entrada.getDip());
-        salida.setGrupoclienteId(entrada.getGrupocliente() != null ? entrada.getGrupocliente().getId() : null);
-        return salida;
-    }
-
-    private Cliente aENTIDAD(ClienteOTD entrada) {
-        Cliente salida = new Cliente();
-        salida.setId(entrada.getId());
-        salida.setNombre(entrada.getNombre());
-        salida.setDip(entrada.getDip());
-        if (entrada.getGrupoclienteId() != null) {
-            Grupocliente grupocliente = grupoclienteRepositorio.findById(entrada.getGrupoclienteId())
-                .orElseThrow(() -> new RecursoNoEncontradoException("Grupocliente no encontrado"));
-            salida.setGrupocliente(grupocliente);
+        if (!clienteRepositorio.existsById(id)) {
+            throw new RecursoNoEncontradoException("No se puede eliminar: cliente con ID %d no encontrado".formatted(id));
         }
-        return salida;
+        clienteRepositorio.deleteById(id);
     }
 
+    // -----------------------------
+    // Métodos auxiliares privados
+    // -----------------------------
+
+    private Cliente obtenerClientePorId(Long id) {
+        return clienteRepositorio.findById(id)
+            .orElseThrow(() -> new RecursoNoEncontradoException("Cliente con ID %d no encontrado".formatted(id)));
+    }
+
+    private Grupocliente obtenerGrupoPorId(Long id) {
+        return grupoclienteRepositorio.findById(id)
+            .orElseThrow(() -> new RecursoNoEncontradoException("Grupo de cliente con ID %d no encontrado".formatted(id)));
+    }
+
+    private ClienteOTD mapToOtd(Cliente cliente) {
+        final ClienteOTD otd = new ClienteOTD();
+        BeanUtils.copyProperties(cliente, otd);
+        if (cliente.getGrupocliente() != null) {
+            otd.setGrupoclienteId(cliente.getGrupocliente().getId());
+        }
+        return otd;
+    }
+
+    private Cliente mapToEntidad(ClienteOTD otd) {
+        final Cliente cliente = new Cliente();
+        BeanUtils.copyProperties(otd, cliente);
+
+        if (otd.getGrupoclienteId() != null) {
+            final Grupocliente grupocliente = obtenerGrupoPorId(otd.getGrupoclienteId());
+            cliente.setGrupocliente(grupocliente);
+        }
+
+        return cliente;
+    }
 }

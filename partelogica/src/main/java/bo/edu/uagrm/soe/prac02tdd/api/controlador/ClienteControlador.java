@@ -44,10 +44,10 @@ public class ClienteControlador {
         return ResponseEntity.ok(servicio.obtenerPorId(id));
     }
 
-    @GetMapping("/buscarPorDIP")
-    @Operation(summary = "buscar Cliente por DIP")
-    public ResponseEntity<ClienteOTD> buscarPorDip(@RequestParam String dip) {
-        return ResponseEntity.ok(servicio.buscarPorDip(dip));
+    @GetMapping("/buscarPorCodigo")
+    @Operation(summary = "buscar Cliente por Codigo")
+    public ResponseEntity<ClienteOTD> buscarPorCodigo(@RequestParam String codigo) {
+        return ResponseEntity.ok(servicio.buscarPorCodigo(codigo));
     }
 
     @PostMapping

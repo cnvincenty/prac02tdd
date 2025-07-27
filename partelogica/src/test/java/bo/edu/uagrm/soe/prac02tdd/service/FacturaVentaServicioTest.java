@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import bo.edu.uagrm.soe.prac02tdd.dominio.entidad.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -18,11 +19,6 @@ import org.mockito.MockitoAnnotations;
 import bo.edu.uagrm.soe.prac02tdd.aplicacion.otd.FacturaVentaItemOTD;
 import bo.edu.uagrm.soe.prac02tdd.aplicacion.otd.FacturaVentaOTD;
 import bo.edu.uagrm.soe.prac02tdd.aplicacion.servicio.implementacion.FacturaVentaServicioImplementacion;
-import bo.edu.uagrm.soe.prac02tdd.dominio.entidad.Cliente;
-import bo.edu.uagrm.soe.prac02tdd.dominio.entidad.FacturaVenta;
-import bo.edu.uagrm.soe.prac02tdd.dominio.entidad.Grupocliente;
-import bo.edu.uagrm.soe.prac02tdd.dominio.entidad.Grupoproducto;
-import bo.edu.uagrm.soe.prac02tdd.dominio.entidad.Producto;
 import bo.edu.uagrm.soe.prac02tdd.infraestructura.ClienteRepositorio;
 import bo.edu.uagrm.soe.prac02tdd.infraestructura.FacturaVentaRepositorio;
 import bo.edu.uagrm.soe.prac02tdd.infraestructura.ProductoRepositorio;
@@ -55,8 +51,11 @@ public class FacturaVentaServicioTest {
 
         Cliente cliente = new Cliente();
         cliente.setId(1L);
-        cliente.setNombre("Juan Jose Miranda");
-        cliente.setDip("12345678");
+        cliente.setNombre("Juan Miranda");
+        cliente.setCodigo("CL11101110");
+        cliente.setTipoDocumento(TipoDocumeto.CI);
+        cliente.setNumeroDocumento("11101110");
+        cliente.setEmail("jjsmm@gmail.com");
         cliente.setGrupocliente(grupoClienteAlMayor);
 
         Grupoproducto grupoHerramientas = new Grupoproducto();
