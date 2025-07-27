@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -28,22 +29,15 @@ import bo.edu.uagrm.soe.prac02tdd.excepcion.RecursoNoEncontradoException;
 import bo.edu.uagrm.soe.prac02tdd.infraestructura.GrupoproductoRepositorio;
 import bo.edu.uagrm.soe.prac02tdd.infraestructura.ProductoRepositorio;
 
+@RequiredArgsConstructor
 @Service
 public class ProductoServicioImplementacion implements ProductoServicio{
 
     private final ProductoRepositorio repositorio;
-
     private final GrupoproductoRepositorio grupoproductoRepositorio;
 
     @Value("${ruta.archivos}")
     private String rutaprincipal;
-
-
-    public ProductoServicioImplementacion(ProductoRepositorio repositorio,
-            GrupoproductoRepositorio grupoproductoRepositorio) {
-        this.repositorio = repositorio;
-        this.grupoproductoRepositorio = grupoproductoRepositorio;
-    }
 
     @Override
     public List<ProductoOTD> obtenerTodos() {
@@ -69,6 +63,7 @@ public class ProductoServicioImplementacion implements ProductoServicio{
     public ProductoOTD actualizar(Long id, ProductoOTD otd) {
         Producto salida = repositorio.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException("Producto no encontrado"));
+        salida.setCodigo(otd.getCodigo());
         salida.setNombre(otd.getNombre());
         salida.setPreciounitario(otd.getPreciounitario());
         salida.setUnidadMedida(otd.getUnidadMedida());
@@ -101,6 +96,7 @@ public class ProductoServicioImplementacion implements ProductoServicio{
     private Producto aENTIDAD(ProductoOTD entrada) {
         Producto salida = new Producto();
         salida.setId(entrada.getId());
+        salida.setCodigo(entrada.getCodigo());
         salida.setNombre(entrada.getNombre());
         salida.setPreciounitario(entrada.getPreciounitario());
         salida.setUnidadMedida(entrada.getUnidadMedida());

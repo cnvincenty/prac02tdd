@@ -12,6 +12,7 @@ public class FacturaVentaOTD {
     private Long id;
     private LocalDateTime fecha;
     private Long clienteId;
+    private String clienteCodigo;
     private String clienteNombre;
     private String clienteGrupo;
     private String almacen;

@@ -11,6 +11,8 @@ public class ProductoOTD {
 
     private Long id;
 
+    private String codigo;
+
     private String nombre;
 
     private Long grupoproductoId;

@@ -1,12 +1,5 @@
 package bo.edu.uagrm.soe.prac02tdd.aplicacion.servicio.implementacion;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import bo.edu.uagrm.soe.prac02tdd.aplicacion.otd.FacturaVentaItemOTD;
 import bo.edu.uagrm.soe.prac02tdd.aplicacion.otd.FacturaVentaOTD;
 import bo.edu.uagrm.soe.prac02tdd.aplicacion.servicio.FacturaVentaServicio;
@@ -18,36 +11,34 @@ import bo.edu.uagrm.soe.prac02tdd.excepcion.RecursoNoEncontradoException;
 import bo.edu.uagrm.soe.prac02tdd.infraestructura.ClienteRepositorio;
 import bo.edu.uagrm.soe.prac02tdd.infraestructura.FacturaVentaRepositorio;
 import bo.edu.uagrm.soe.prac02tdd.infraestructura.ProductoRepositorio;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RequiredArgsConstructor
 @Service
 public class FacturaVentaServicioImplementacion implements FacturaVentaServicio {
 
-    @Autowired
-    private FacturaVentaRepositorio facturaVentaRepositorio;
-
-    @Autowired
-    private ClienteRepositorio clienteRepositorio;
-
-    @Autowired
-    private ProductoRepositorio productoRepositorio;
+    private final FacturaVentaRepositorio facturaVentaRepositorio;
+    private final ClienteRepositorio clienteRepositorio;
+    private final ProductoRepositorio productoRepositorio;
 
     @Override
     @Transactional
     public FacturaVentaOTD registrarFacturaVenta(FacturaVentaOTD facturaVentaOTD) {
-        // Obtener el cliente
-        Cliente cliente = clienteRepositorio.findById(facturaVentaOTD.getClienteId())
-                .orElseThrow(() -> new RecursoNoEncontradoException("Cliente no encontrado"));
 
-        // Crear la factura
+        Cliente cliente = obtenerClientePorId(facturaVentaOTD.getClienteId());
+
         FacturaVenta facturaVenta = new FacturaVenta();
         facturaVenta.setCliente(cliente);
         facturaVenta.setAlmacen(facturaVentaOTD.getAlmacen());
         facturaVenta.setCondicionPago(facturaVentaOTD.getCondicionPago());
 
-        // Agregar los items
         for (FacturaVentaItemOTD itemOTD : facturaVentaOTD.getItems()) {
-            Producto producto = productoRepositorio.findById(itemOTD.getProductoId())
-                    .orElseThrow(() -> new RecursoNoEncontradoException("Producto no encontrado"));
+            Producto producto = obtenerProductoPorId(itemOTD.getProductoId());
 
             FacturaVentaItem item = new FacturaVentaItem();
             item.setProducto(producto);
@@ -57,57 +48,80 @@ public class FacturaVentaServicioImplementacion implements FacturaVentaServicio 
             facturaVenta.agregarItem(item);
         }
 
-        // Calcular totales y descuentos
         facturaVenta.calcularTotales();
+        facturaVentaRepositorio.save(facturaVenta);
 
-        // Guardar la factura
-        facturaVenta = facturaVentaRepositorio.save(facturaVenta);
-
-        // Convertir a DTO y devolver
         return convertirADTO(facturaVenta);
     }
 
     @Override
     public FacturaVentaOTD obtenerFacturaVenta(Long id) {
         FacturaVenta facturaVenta = facturaVentaRepositorio.findById(id)
-                .orElseThrow(() -> new RecursoNoEncontradoException("Factura no encontrada"));
+            .orElseThrow(() -> new RecursoNoEncontradoException("Factura con ID %d no encontrada".formatted(id)));
         return convertirADTO(facturaVenta);
     }
 
     @Override
     public List<FacturaVentaOTD> listarFacturasVenta() {
         return facturaVentaRepositorio.findAll().stream()
-                .map(this::convertirADTO)
-                .collect(Collectors.toList());
+            .map(this::convertirADTO)
+            .collect(Collectors.toList());
+    }
+
+    // -----------------------------
+    // Métodos auxiliares privados
+    // -----------------------------
+
+    private Cliente obtenerClientePorId(Long clienteId) {
+        return clienteRepositorio.findById(clienteId)
+            .orElseThrow(() -> new RecursoNoEncontradoException("Cliente con ID %d no encontrado".formatted(clienteId)));
+    }
+
+    private Producto obtenerProductoPorId(Long productoId) {
+        return productoRepositorio.findById(productoId)
+            .orElseThrow(() -> new RecursoNoEncontradoException("Producto con ID %d no encontrado".formatted(productoId)));
     }
 
     private FacturaVentaOTD convertirADTO(FacturaVenta facturaVenta) {
         FacturaVentaOTD dto = new FacturaVentaOTD();
+
         dto.setId(facturaVenta.getId());
         dto.setFecha(facturaVenta.getFecha());
         dto.setClienteId(facturaVenta.getCliente().getId());
+        dto.setClienteCodigo(facturaVenta.getCliente().getCodigo());
         dto.setClienteNombre(facturaVenta.getCliente().getNombre());
-        dto.setClienteGrupo(facturaVenta.getCliente().getGrupocliente() != null ?
-                facturaVenta.getCliente().getGrupocliente().getNombre() : null);
+
+        dto.setClienteGrupo(
+            facturaVenta.getCliente().getGrupocliente() != null
+                ? facturaVenta.getCliente().getGrupocliente().getNombre()
+                : null
+        );
+
         dto.setAlmacen(facturaVenta.getAlmacen());
         dto.setCondicionPago(facturaVenta.getCondicionPago());
         dto.setTotal(facturaVenta.getTotal());
 
-        for (FacturaVentaItem item : facturaVenta.getItems()) {
+        List<FacturaVentaItemOTD> items = facturaVenta.getItems().stream().map(item -> {
             FacturaVentaItemOTD itemDTO = new FacturaVentaItemOTD();
             itemDTO.setProductoId(item.getProducto().getId());
+            itemDTO.setProductoCodigo(item.getProducto().getCodigo());
             itemDTO.setProductoNombre(item.getProducto().getNombre());
-            itemDTO.setProductoGrupo(item.getProducto().getGrupoproducto() != null ?
-                    item.getProducto().getGrupoproducto().getNombre() : null);
+
+            itemDTO.setProductoGrupo(
+                item.getProducto().getGrupoproducto() != null
+                    ? item.getProducto().getGrupoproducto().getNombre()
+                    : null
+            );
+
             itemDTO.setCantidad(item.getCantidad());
             itemDTO.setPrecioUnitario(item.getPrecioUnitario());
             itemDTO.setPorcentajeDescuento(item.getPorcentajeDescuento());
             itemDTO.setMontoDescuento(item.getMontoDescuento());
             itemDTO.setSubtotal(item.getSubtotal());
+            return itemDTO;
+        }).toList();
 
-            dto.getItems().add(itemDTO);
-        }
-
+        dto.setItems(items);
         return dto;
     }
 }

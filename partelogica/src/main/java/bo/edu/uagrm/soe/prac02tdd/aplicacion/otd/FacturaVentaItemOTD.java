@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class FacturaVentaItemOTD {
     private Long productoId;
+    private String productoCodigo;
     private String productoNombre;
     private String productoGrupo;
     private BigDecimal cantidad;
