@@ -16,6 +16,7 @@
     <thead class="table-light">
       <tr>
         <th class="text-center">ID</th>
+        <th class="text-center">Codigo</th>
         <th class="text-center">Nombre</th>
         <th class="text-center">Unidad de Medida</th>
         <th class="text-center">Precio Unitario</th>
@@ -26,6 +27,7 @@
     <tbody>
       <tr *ngFor="let g of datos">
         <td class="align-middle text-center">{{ g.id }}</td>
+        <td class="align-middle text-left">{{ g.codigo }}</td>
         <td class="align-middle text-left">{{ g.nombre }}</td>
         <td class="align-middle text-left">{{ g.unidadMedida }}</td>
         <td class="align-middle text-end"><h2>{{ g.preciounitario | number:'1.2-2'}}</h2></td>
@@ -62,7 +64,12 @@
           </div>
           <div class="modal-body row g-3">
 
-            <div class="col-md-8">
+            <div class="col-md-2">
+              <label for="codigo" class="form-label">Codigo</label>
+              <input type="text" class="form-control" id="codigo" name="codigo" [(ngModel)]="dato.codigo" required />
+            </div>
+
+            <div class="col-md-6">
               <label for="nombre" class="form-label">Nombre</label>
               <input type="text" class="form-control" id="nombre" name="nombre" [(ngModel)]="dato.nombre" required />
             </div>

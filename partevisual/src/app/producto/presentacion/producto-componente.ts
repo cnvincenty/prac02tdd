@@ -45,6 +45,7 @@ export class ProductoComponente implements OnInit{
 
   crearProductoVacio(): Producto {
     return {
+      codigo: '',
       nombre: '',
       unidadMedida: '',
       preciounitario: 0,
@@ -67,6 +68,7 @@ export class ProductoComponente implements OnInit{
   }
 
   guardar(): void {
+    this.dato.codigo = this.dato.codigo.toUpperCase();
     this.dato.nombre = this.dato.nombre.toUpperCase();
     this.dato.unidadMedida = this.dato.unidadMedida.toUpperCase();
 

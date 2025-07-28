@@ -1,6 +1,9 @@
 export interface Cliente {
   id?: number;
+  codigo: string;
   nombre: string;
-  dip: string;
+  tipoDocumento: string;
+  numeroDocumento: string;
+  email: string;
   grupoclienteId: number;
 }

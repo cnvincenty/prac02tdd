@@ -1,6 +1,6 @@
 package bo.edu.uagrm.soe.prac02tdd.aplicacion.otd;
 
-import bo.edu.uagrm.soe.prac02tdd.dominio.entidad.TipoDocumeto;
+import bo.edu.uagrm.soe.prac02tdd.dominio.entidad.TipoDocumento;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +14,7 @@ public class ClienteOTD {
 
     private String nombre;
 
-    private TipoDocumeto tipoDocumento;
+    private TipoDocumento tipoDocumento;
 
     private String numeroDocumento;
 

@@ -21,8 +21,8 @@ export class ClienteServicio {
     return this.httpCliente.get<Cliente>(`${this.url}/${id}`);
   }
 
-  obtenerPorDIP(dip: string): Observable<Cliente> {
-    return this.httpCliente.get<Cliente>(`${this.url}/buscarPorDIP?dip=${dip}`);
+  obtenerPorCodigo(codigo: string): Observable<Cliente> {
+    return this.httpCliente.get<Cliente>(`${this.url}/buscarPorCodigo?codigo=${codigo}`);
   }
 
   crear(entrada: Cliente): Observable<Cliente> {

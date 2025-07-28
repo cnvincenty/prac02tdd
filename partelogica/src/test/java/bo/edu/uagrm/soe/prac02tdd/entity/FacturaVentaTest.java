@@ -19,7 +19,7 @@ public class FacturaVentaTest {
         cliente.setId(1L);
         cliente.setNombre("Juan Miranda");
         cliente.setCodigo("CL11101110");
-        cliente.setTipoDocumento(TipoDocumeto.CI);
+        cliente.setTipoDocumento(TipoDocumento.CI);
         cliente.setNumeroDocumento("11101110");
         cliente.setEmail("jjsmm@gmail.com");
         cliente.setGrupocliente(grupoClienteAlMayor);
@@ -47,7 +47,7 @@ public class FacturaVentaTest {
         item.setProducto(taladro);
         item.setCantidad(new BigDecimal("1"));
         item.setPrecioUnitario(taladro.getPreciounitario());
-        
+
         factura.agregarItem(item);
         factura.calcularTotales();
 
@@ -69,7 +69,7 @@ public class FacturaVentaTest {
         cliente.setId(1L);
         cliente.setNombre("Juan Miranda");
         cliente.setCodigo("CL11101110");
-        cliente.setTipoDocumento(TipoDocumeto.CI);
+        cliente.setTipoDocumento(TipoDocumento.CI);
         cliente.setNumeroDocumento("11101110");
         cliente.setEmail("jjsmm@gmail.com");
         cliente.setGrupocliente(grupoClienteAlMayor);
@@ -90,7 +90,7 @@ public class FacturaVentaTest {
         item.setProducto(taladro);
         item.setCantidad(new BigDecimal("1"));
         item.setPrecioUnitario(taladro.getPreciounitario());
-        
+
         factura.agregarItem(item);
         factura.calcularTotales();
 
@@ -109,7 +109,7 @@ public class FacturaVentaTest {
         cliente.setId(1L);
         cliente.setNombre("Juan Miranda");
         cliente.setCodigo("CL11101110");
-        cliente.setTipoDocumento(TipoDocumeto.CI);
+        cliente.setTipoDocumento(TipoDocumento.CI);
         cliente.setNumeroDocumento("11101110");
         cliente.setEmail("jjsmm@gmail.com");
         cliente.setGrupocliente(grupoClienteNormal);
@@ -130,7 +130,7 @@ public class FacturaVentaTest {
         item.setProducto(taladro);
         item.setCantidad(new BigDecimal("1"));
         item.setPrecioUnitario(taladro.getPreciounitario());
-        
+
         factura.agregarItem(item);
         factura.calcularTotales();
 
@@ -150,7 +150,7 @@ public class FacturaVentaTest {
         cliente.setId(1L);
         cliente.setNombre("Juan Miranda");
         cliente.setCodigo("CL11101110");
-        cliente.setTipoDocumento(TipoDocumeto.CI);
+        cliente.setTipoDocumento(TipoDocumento.CI);
         cliente.setNumeroDocumento("11101110");
         cliente.setEmail("jjsmm@gmail.com");
         cliente.setGrupocliente(grupoClienteAlMayor);
@@ -190,11 +190,11 @@ public class FacturaVentaTest {
         assertEquals(new BigDecimal("11.0"), item1.getPorcentajeDescuento());
         assertEquals(new BigDecimal("11.00"), item1.getMontoDescuento());
         assertEquals(new BigDecimal("89.00"), item1.getSubtotal());
-        
+
         assertEquals(new BigDecimal("11.0"), item2.getPorcentajeDescuento());
         assertEquals(new BigDecimal("4.40"), item2.getMontoDescuento()); // 11% de 40 (2 * 20)
         assertEquals(new BigDecimal("35.60"), item2.getSubtotal());
-        
+
         assertEquals(new BigDecimal("124.60"), factura.getTotal());
     }
 }

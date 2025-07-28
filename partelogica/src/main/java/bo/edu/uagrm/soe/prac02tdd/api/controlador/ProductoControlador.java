@@ -76,8 +76,16 @@ public class ProductoControlador {
     @GetMapping("/descargarImagen/{nombreArchivo}")
     ResponseEntity<?> descargarImagen(@PathVariable String nombreArchivo) {
         Resource archivo = servicio.descargarImagen(nombreArchivo);
+
+        if (archivo == null || !archivo.exists() || !archivo.isReadable()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("No se pudo encontrar o leer la imagen solicitada.");
+        }
+
         HttpHeaders cabecera = new HttpHeaders();
-        cabecera.add(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\""+ archivo.getFilename() + "\"");
+        cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + archivo.getFilename() + "\"");
+
         return new ResponseEntity<Resource>(archivo, cabecera, HttpStatus.OK);
     }
 
@@ -86,6 +94,5 @@ public class ProductoControlador {
         servicio.cargarImagen(id, archivo);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 
 }

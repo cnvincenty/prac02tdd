@@ -13,7 +13,6 @@ import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -28,10 +27,11 @@ import bo.edu.uagrm.soe.prac02tdd.dominio.entidad.Producto;
 import bo.edu.uagrm.soe.prac02tdd.excepcion.RecursoNoEncontradoException;
 import bo.edu.uagrm.soe.prac02tdd.infraestructura.GrupoproductoRepositorio;
 import bo.edu.uagrm.soe.prac02tdd.infraestructura.ProductoRepositorio;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class ProductoServicioImplementacion implements ProductoServicio{
+public class ProductoServicioImplementacion implements ProductoServicio {
 
     private final ProductoRepositorio repositorio;
     private final GrupoproductoRepositorio grupoproductoRepositorio;
@@ -70,7 +70,7 @@ public class ProductoServicioImplementacion implements ProductoServicio{
 
         if (otd.getGrupoproductoId() != null) {
             Grupoproducto grupoproducto = grupoproductoRepositorio.findById(otd.getGrupoproductoId())
-                .orElseThrow(() -> new RecursoNoEncontradoException("Grupoproducto no encontrado"));
+                    .orElseThrow(() -> new RecursoNoEncontradoException("Grupoproducto no encontrado"));
             salida.setGrupoproducto(grupoproducto);
         }
 
@@ -103,20 +103,22 @@ public class ProductoServicioImplementacion implements ProductoServicio{
         salida.setRuta(entrada.getRuta());
         if (entrada.getGrupoproductoId() != null) {
             Grupoproducto grupoproducto = grupoproductoRepositorio.findById(entrada.getGrupoproductoId())
-                .orElseThrow(() -> new RecursoNoEncontradoException("Grupoproducto no encontrado"));
+                    .orElseThrow(() -> new RecursoNoEncontradoException("Grupoproducto no encontrado"));
             salida.setGrupoproducto(grupoproducto);
         }
         return salida;
     }
 
     @Override
-    public void cargarImagen(Long id, MultipartFile archivo){
+    public void cargarImagen(Long id, MultipartFile archivo) {
         if (!archivo.isEmpty()) {
-            String ruta = rutaprincipal+"/productos/imagenes";
-            String nombreArchivo = UUID.randomUUID().toString()+"."+StringUtils.getFilenameExtension(archivo.getOriginalFilename());
+            String ruta = rutaprincipal + "/productos/imagenes";
+            String nombreArchivo = UUID.randomUUID().toString() + "."
+                    + StringUtils.getFilenameExtension(archivo.getOriginalFilename());
 
-            Producto entrada =  repositorio.findById(id)
-                                .orElseThrow(() -> new RecursoNoEncontradoException("Producto no encontrado"));;
+            Producto entrada = repositorio.findById(id)
+                    .orElseThrow(() -> new RecursoNoEncontradoException("Producto no encontrado"));
+            ;
 
             entrada.setRuta(nombreArchivo);
             repositorio.save(entrada);
@@ -134,7 +136,7 @@ public class ProductoServicioImplementacion implements ProductoServicio{
     }
 
     private void redimensionar(String nombreArchivo) {
-        String ruta = rutaprincipal+"/item/imagenes";
+        String ruta = rutaprincipal + "/item/imagenes";
         int ancho = 300;
         int alto = 300;
         try {
@@ -161,31 +163,32 @@ public class ProductoServicioImplementacion implements ProductoServicio{
 
     @Override
     public Resource descargarImagen(String nombreArchivo) {
-        String ruta = rutaprincipal+"/productos/imagenes";
+        String ruta = rutaprincipal + "/productos/imagenes";
         Path rutaArchivo = Paths.get(ruta).resolve(nombreArchivo).toAbsolutePath();
         Path rutaArchivoSinImagen = Paths.get(ruta).resolve("sinimagen.png").toAbsolutePath();
-        Resource recurso = null;
+
         try {
-            recurso = new UrlResource(rutaArchivo.toUri());
-            if (recurso.exists() || recurso.isReadable()) {
+            Resource recurso = new UrlResource(rutaArchivo.toUri());
+            if (recurso.exists() && recurso.isReadable()) {
                 return recurso;
-            } else {
-                recurso = new UrlResource(rutaArchivoSinImagen.toUri());
-                return recurso;
+            }
+
+            Resource sinImagen = new UrlResource(rutaArchivoSinImagen.toUri());
+            if (sinImagen.exists() && sinImagen.isReadable()) {
+                return sinImagen;
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        return recurso;
+
+        return null;
     }
 
     @Override
     public List<ProductoOTD> obtenerPorIdGrupoproducto(Long idgrupoproducto) {
         return repositorio.findAllByGrupoproductoId(idgrupoproducto).stream()
-            .map(this::aOTD)
-            .toList();
+                .map(this::aOTD)
+                .toList();
     }
 
-
 }
-

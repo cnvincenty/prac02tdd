@@ -3,7 +3,7 @@ package bo.edu.uagrm.soe.prac02tdd.dominio.entidad;
 /**
  * @author Juan Jose Miranda
  */
-public enum TipoDocumeto {
+public enum TipoDocumento {
     CI, //Carnet Identidad
     CEX, //Carnet de Extranjeria
     PAS, //Pasaporte

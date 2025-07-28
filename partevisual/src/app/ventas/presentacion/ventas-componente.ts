@@ -35,12 +35,14 @@ export class VentasComponente implements OnInit{
 
   productosSeleccionados: { producto: Producto; cantidad: number }[] = [];
 
-  ciBusqueda: string = '';
+  codigoBusqueda: string = '';
 
   clienteEncontrado: any = null;
 
   gruposClientes: Grupocliente[] = [];
   gruposProductos: Grupoproducto[] = [];
+
+  condicionPago: 'EFECTIVO' | 'CREDITO' | null = null;
 
   constructor(
     private grupoproductoServicio: GrupoproductoServicio,
@@ -96,13 +98,13 @@ export class VentasComponente implements OnInit{
   }
 
   buscarCliente(): void {
-  const ci = this.ciBusqueda.trim();
-  if (!ci) {
+  const codigo = this.codigoBusqueda.trim();
+  if (!codigo) {
     this.clienteEncontrado = null;
     return;
   }
 
-  this.clienteServicio.obtenerPorDIP(ci).subscribe({
+  this.clienteServicio.obtenerPorCodigo(codigo).subscribe({
     next: (cliente) => {
       this.clienteEncontrado = cliente;
     },
@@ -119,8 +121,9 @@ export class VentasComponente implements OnInit{
 
     const items: Facturaventaitem[] = this.productosSeleccionados.map(item => ({
       productoId: item.producto.id!,
+      productoCodigo: item.producto.codigo,
       productoNombre: item.producto.nombre,
-      productoGrupo: '', // o el nombre si lo tienes
+      productoGrupo: '',
       cantidad: item.cantidad,
       precioUnitario: item.producto.preciounitario,
       porcentajeDescuento: 0,
@@ -145,7 +148,7 @@ export class VentasComponente implements OnInit{
       next: () => {
         alert('Factura registrada con éxito');
         this.productosSeleccionados = [];
-        this.ciBusqueda = '';
+        this.codigoBusqueda = '';
         this.clienteEncontrado = null;
       },
       error: (err) => {

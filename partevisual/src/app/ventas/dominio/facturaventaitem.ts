@@ -1,5 +1,6 @@
 export interface Facturaventaitem {
     productoId: number;
+    productoCodigo: string;
     productoNombre: string;
     productoGrupo: string;
     cantidad: number;

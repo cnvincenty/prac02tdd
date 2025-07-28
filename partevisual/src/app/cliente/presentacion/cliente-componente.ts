@@ -14,15 +14,24 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './cliente-componente.html',
   styleUrl: './cliente-componente.css'
 })
-export class ClienteComponente implements OnInit{
+export class ClienteComponente implements OnInit {
 
-  @ViewChild('ventanaModal') ventanaModalRef!: ElementRef; modal?: Modal;
+  @ViewChild('ventanaModal') ventanaModalRef!: ElementRef;
+  modal?: Modal;
 
   datos: Cliente[] = [];
   dato: Cliente = this.crearClienteVacio();
   editando = false;
 
   gruposclientes: Grupocliente[] = [];
+
+  tipoDocumentos: { codigo: string, descripcion: string }[] = [
+    { codigo: 'CI', descripcion: 'Carnet de Identidad' },
+    { codigo: 'CEX', descripcion: 'Carnet de Extranjería' },
+    { codigo: 'PAS', descripcion: 'Pasaporte' },
+    { codigo: 'OD', descripcion: 'Otro Documento' },
+    { codigo: 'NIT', descripcion: 'NIT (Número de Identificación Tributaria)' }
+  ];
 
   constructor(
     private servicio: ClienteServicio,
@@ -36,8 +45,11 @@ export class ClienteComponente implements OnInit{
 
   crearClienteVacio(): Cliente {
     return {
+      codigo: '',
       nombre: '',
-      dip: '',
+      tipoDocumento: '',
+      numeroDocumento: '',
+      email: '',
       grupoclienteId: 0
     };
   }
@@ -45,6 +57,16 @@ export class ClienteComponente implements OnInit{
   abrirNuevo(): void {
     this.dato = this.crearClienteVacio();
     this.editando = false;
+    this.mostrarModal();
+  }
+
+  editar(cliente: Cliente): void {
+    this.dato = { ...cliente };
+    this.editando = true;
+    this.mostrarModal();
+  }
+
+  mostrarModal(): void {
     if (!this.modal) {
       this.modal = new Modal(this.ventanaModalRef.nativeElement);
     }
@@ -56,6 +78,8 @@ export class ClienteComponente implements OnInit{
   }
 
   guardar(): void {
+    if (!this.dato) return;
+
     const obs = this.editando && this.dato.id
       ? this.servicio.actualizar(this.dato)
       : this.servicio.crear(this.dato);
@@ -65,15 +89,6 @@ export class ClienteComponente implements OnInit{
       this.cargarDatos();
       this.cerrarModal();
     });
-  }
-
-  editar(cliente: Cliente): void {
-    this.dato = { ...cliente };
-    this.editando = true;
-    if (!this.modal) {
-      this.modal = new Modal(this.ventanaModalRef.nativeElement);
-    }
-    this.modal.show();
   }
 
   eliminar(id: number): void {

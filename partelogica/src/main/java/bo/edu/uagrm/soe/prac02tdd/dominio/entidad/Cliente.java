@@ -24,7 +24,7 @@ public class Cliente {
 
     @Column(name = "tipo_documento", nullable = false)
     @Enumerated(EnumType.STRING)
-    private TipoDocumeto tipoDocumento;
+    private TipoDocumento tipoDocumento;
 
     @Column(name = "numero_documento", length = 20, nullable = false)
     private String numeroDocumento;
